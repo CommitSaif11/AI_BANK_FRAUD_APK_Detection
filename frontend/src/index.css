@@ -1,0 +1,213 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #0f1628;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-card-hover: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(59, 130, 246, 0.3);
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --blue: #3b82f6;
+  --blue-light: #60a5fa;
+  --blue-bg: rgba(59, 130, 246, 0.1);
+
+  --red: #ef4444;
+  --red-light: #f87171;
+  --red-bg: rgba(239, 68, 68, 0.1);
+
+  --amber: #f59e0b;
+  --amber-light: #fbbf24;
+  --amber-bg: rgba(245, 158, 11, 0.1);
+
+  --green: #22c55e;
+  --green-light: #4ade80;
+  --green-bg: rgba(34, 197, 94, 0.1);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--blue);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--blue-light);
+}
+
+.mono {
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge-red {
+  color: var(--red-light);
+  background: var(--red-bg);
+  border: 1px solid var(--red);
+}
+
+.badge-amber {
+  color: var(--amber-light);
+  background: var(--amber-bg);
+  border: 1px solid var(--amber);
+}
+
+.badge-green {
+  color: var(--green-light);
+  background: var(--green-bg);
+  border: 1px solid var(--green);
+}
+
+.badge-blue {
+  color: var(--blue-light);
+  background: var(--blue-bg);
+  border: 1px solid var(--blue);
+}
+
+/* Page fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Page transition (used by App.jsx for page switches) */
+.page-transition {
+  transition: opacity 0.25s ease-in-out;
+}
+
+.page-transition.fade-out {
+  opacity: 0;
+}
+
+.page-transition.fade-in-active {
+  opacity: 1;
+}
+
+/* Hoverable cards */
+.hover-card {
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.hover-card:hover {
+  background: var(--bg-card-hover);
+}
+
+/* Critical risk pulsing glow */
+@keyframes pulseGlowRed {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+}
+
+.pulse-critical {
+  animation: pulseGlowRed 2s ease-out infinite;
+}
+
+/* Hero layout: stacks below 900px */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  padding: 60px 40px;
+}
+
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    padding: 32px 20px;
+    gap: 32px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr 1fr !important;
+    padding: 0 20px 40px !important;
+  }
+
+  .results-two-col,
+  .results-three-col,
+  .fingerprint-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .pipeline-strip {
+    flex-direction: column !important;
+  }
+
+  .pipeline-strip > div {
+    border-left: none !important;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .pipeline-strip > div:first-child {
+    border-top: none;
+  }
+}
+
+/* Small inline spinner (e.g. for buttons) */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-sm {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}

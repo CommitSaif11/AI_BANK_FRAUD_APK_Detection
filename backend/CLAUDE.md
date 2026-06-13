@@ -52,9 +52,10 @@ To extend the fingerprint database, edit `app/fingerprints/db.json` (array of `{
 
 Each agent module (`agent1_triage.py`, `agent2_analyst.py`, `agent3_synthesizer.py`, `agent4_reporter.py`) follows the same shape:
 - A `SYSTEM_PROMPT` + `USER_PROMPT_TEMPLATE` instructing the model to return raw JSON only (no markdown/backticks).
-- A `run_*_agent(...)` function that calls Groq, `json.loads()`s the response, retries once with an "IMPORTANT: respond with raw JSON only" suffix if parsing fails, and falls back to a hardcoded default dict (with an `"error"` key) if both attempts fail.
+- A `_call_groq(...)` helper that retries up to 3 times with `time.sleep(5)` between attempts if Groq raises `groq.RateLimitError` (429).
+- A `run_*_agent(...)` function that calls `_call_groq`, `json.loads()`s the response, retries once with an "IMPORTANT: respond with raw JSON only" suffix if parsing fails, and falls back to a hardcoded default dict (with an `"error"` key) if both attempts fail.
 
-`app/ai/pipeline.py::run_full_ai_pipeline(analysis_json)` chains all four agents in sequence (each consumes the prior agents' outputs), printing progress after each stage, and returns a combined dict: `{triage, analysis, risk_assessment, report, final_risk_score, risk_level}`.
+`app/ai/pipeline.py::run_full_ai_pipeline(analysis_json)` chains all four agents in sequence (each consumes the prior agents' outputs), printing progress after each stage with a `time.sleep(3)` pause between agent calls to avoid 429s, and returns a combined dict: `{triage, analysis, risk_assessment, report, final_risk_score, risk_level}`.
 
 `app/ai/pdf_generator.py::generate_pdf_report(full_pipeline_result, output_path)` renders the agent-4 report into a formatted PDF (reportlab) with a color-coded risk banner (red/orange/yellow/green by `risk_level`). Note the top-of-file `hashlib.md5` monkeypatch — required because this environment's OpenSSL build rejects reportlab's `usedforsecurity=` kwarg; keep it if reportlab is touched.
 

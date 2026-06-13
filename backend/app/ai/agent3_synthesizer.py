@@ -1,4 +1,7 @@
 import json
+import time
+
+import groq
 
 from app.ai.config import groq_client
 
@@ -87,16 +90,22 @@ def _build_user_prompt(analysis_json: dict, triage_result: dict, analyst_result:
 
 
 def _call_groq(user_prompt: str) -> str:
-    response = groq_client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        max_tokens=800,
-        temperature=0.1,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": user_prompt},
-        ],
-    )
-    return response.choices[0].message.content
+    for attempt in range(3):
+        try:
+            response = groq_client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                max_tokens=800,
+                temperature=0.1,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_prompt},
+                ],
+            )
+            return response.choices[0].message.content
+        except groq.RateLimitError:
+            if attempt == 2:
+                raise
+            time.sleep(5)
 
 
 def run_synthesizer_agent(analysis_json: dict, triage_result: dict, analyst_result: dict) -> dict:

@@ -24,6 +24,9 @@ MAX_FILE_SIZE = 100 * 1024 * 1024  # 100 MB
 # In-memory store for full pipeline results, keyed by uploaded filename.
 ANALYSIS_RESULTS = {}
 
+REPORTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "generated_reports")
+os.makedirs(REPORTS_DIR, exist_ok=True)
+
 
 @app.get("/health")
 def health_check():
@@ -139,21 +142,42 @@ async def analyze_full(file: UploadFile = File(...)):
 
         ANALYSIS_RESULTS[file.filename] = result
 
+        pdf_path = os.path.join(REPORTS_DIR, f"{file.filename}_report.pdf")
+        generate_pdf_report(result, pdf_path)
+
         return result
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
 
 
+@app.get("/reports")
+def list_reports():
+    reports = []
+    for entry in os.scandir(REPORTS_DIR):
+        if entry.is_file() and entry.name.endswith("_report.pdf"):
+            filename = entry.name[: -len("_report.pdf")]
+            result = ANALYSIS_RESULTS.get(filename, {})
+            reports.append(
+                {
+                    "filename": filename,
+                    "risk_level": result.get("risk_level"),
+                    "final_risk_score": result.get("final_risk_score"),
+                    "download_url": f"/report/{filename}",
+                }
+            )
+    return {"reports": reports}
+
+
 @app.get("/report/{filename}")
 def get_report(filename: str):
-    result = ANALYSIS_RESULTS.get(filename)
-    if result is None:
-        raise HTTPException(status_code=404, detail="No analysis result found for this filename")
+    pdf_path = os.path.join(REPORTS_DIR, f"{filename}_report.pdf")
 
-    tmp_dir = tempfile.gettempdir()
-    pdf_path = os.path.join(tmp_dir, f"{uuid.uuid4().hex}_report.pdf")
-    generate_pdf_report(result, pdf_path)
+    if not os.path.exists(pdf_path):
+        result = ANALYSIS_RESULTS.get(filename)
+        if result is None:
+            raise HTTPException(status_code=404, detail="No analysis result found for this filename")
+        generate_pdf_report(result, pdf_path)
 
     return FileResponse(
         pdf_path,

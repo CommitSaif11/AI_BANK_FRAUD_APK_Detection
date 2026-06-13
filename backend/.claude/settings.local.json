@@ -24,7 +24,14 @@
       "Bash(powershell -Command \"Stop-Process -Id 14104 -Force\")",
       "Bash(powershell -Command \"Stop-Process -Id 4420 -Force\")",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(xargs grep -l \"gsk_\")",
+      "Bash(git commit -m ' *)",
+      "Bash(powershell -Command \"Stop-Process -Id 19464 -Force\")",
+      "Bash(./venv/Scripts/python.exe -m uvicorn main:app --port 8000)",
+      "Bash(ls .cursor)",
+      "Bash(ls .github)",
+      "Bash(ls README.md)"
     ]
   }
 }

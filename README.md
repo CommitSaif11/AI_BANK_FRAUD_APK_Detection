@@ -1,16 +1,17 @@
 # ThreatLens
 
-ThreatLens is an APK malware-analysis tool. Upload an `.apk` file and it:
+ThreatLens is an APK malware analysis tool built with FastAPI (backend) and React + Vite (frontend). Upload an `.apk` file and it:
 
-1. Extracts metadata (permissions, certs, URLs/IPs) with Androguard
-2. Runs heuristic risk scoring (permissions, impersonation, network indicators)
-3. Matches the APK against a malware-family fingerprint database
-4. Runs a 4-agent Groq LLM pipeline (Triage → Code Analysis → Risk Synthesis → Report Writer) to produce a plain-English risk verdict
-5. Generates a formal PDF investigation report
+1. Reverse engineers the APK (apktool + jadx) to extract decompiled code.
+2. Extracts metadata (permissions, certs, URLs/IPs) with Androguard.
+3. Scores heuristics (permissions, impersonation, network indicators) and checks fingerprint matches.
+4. Extracts suspicious code snippets from the decompiled JADX output.
+5. Runs a 4-agent Groq LLM pipeline (Triage, Analysis, Synthesis, Report) using real decompiled code to produce a plain-English risk verdict.
+6. Generates a formal PDF investigation report.
 
-The project has two parts:
-- **`backend/`** — FastAPI (Python)
-- **`frontend/`** — React + Vite (JavaScript)
+### API Endpoints
+- `POST /analyze` — Steps 1-3 only. Returns heuristic risk scoring and fingerprint matches in seconds.
+- `POST /analyze/full` — All steps (1-6) including the full AI pipeline and code analysis. Takes ~30 seconds.
 
 ---
 
@@ -23,6 +24,7 @@ Make sure these are installed before you start:
 | Python | 3.10+ (3.11 recommended) | `python --version` |
 | Node.js | 18+ | `node --version` |
 | npm | comes with Node | `npm --version` |
+| Java | JDK 8+ (required for apktool & jadx) | `java -version` |
 | Git | any recent version | `git --version` |
 
 You will also need a **free Groq API key** for the AI pipeline — get one at [console.groq.com](https://console.groq.com/keys).
@@ -33,12 +35,19 @@ You will also need a **free Groq API key** for the AI pipeline — get one at [c
 
 ```bash
 git clone <repo-url>
-cd ps1
+cd AI_BANK_FRAUD_APK_Detection
 ```
 
 ---
 
 ## 2. Backend setup (FastAPI)
+
+### 2.0 Install Analysis Tools (Required)
+The backend requires `apktool` and `jadx` to reverse engineer APKs. **These are NOT included in the git repository.**
+
+1. Create a `backend/tools/` folder.
+2. Download `apktool` from [apktool.org](https://apktool.org/) and rename the JAR file to `apktool.jar`. Place it in `backend/tools/`.
+3. Download the `jadx-1.5.5.zip` (or newer) release from [skylot/jadx](https://github.com/skylot/jadx/releases), extract it, and place the contents in `backend/tools/jadx/`.
 
 ### 2.1 Create and activate a virtual environment
 
@@ -177,30 +186,39 @@ Open that URL in your browser.
 ## 5. Project structure
 
 ```
-ps1/
+AI_BANK_FRAUD_APK_Detection/
 ├── backend/
-│   ├── main.py                 # FastAPI app, CORS config, endpoints
+│   ├── main.py                 # FastAPI app, CORS config, /analyze endpoints
 │   ├── requirements.txt        # Python dependencies
 │   ├── .env                    # GROQ_API_KEY (not committed with real secrets)
+│   ├── tools/                  # Must manually download apktool.jar and jadx/ here
+│   │   ├── apktool.jar
+│   │   └── jadx/
 │   ├── app/
-│   │   ├── extraction/         # Androguard-based APK metadata extraction
-│   │   ├── scoring/             # Permission / impersonation / network risk heuristics
-│   │   ├── fingerprints/        # Malware family fingerprint matcher + db.json
-│   │   └── ai/                  # 4-agent Groq pipeline + PDF report generator
-│   ├── generated_reports/       # PDF reports written here (gitignored)
-│   ├── test_malicious.apk       # Sample APK for testing
-│   ├── API_CONTRACT.md          # Full /analyze and /analyze/full response schema
-│   └── CLAUDE.md                # Architecture notes for AI-assisted development
+│   │   ├── extraction/         # Metadata (Androguard), Decompilation tools, Code scanner
+│   │   │   ├── extractor.py
+│   │   │   ├── reverse_engineer.py
+│   │   │   └── code_extractor.py
+│   │   ├── scoring/            # Permission / impersonation / network risk heuristics
+│   │   ├── fingerprints/       # Malware family fingerprint matcher + db.json
+│   │   └── ai/                 # 4-agent Groq pipeline receiving code snippets + PDF report
+│   │       ├── pipeline.py
+│   │       ├── agent1_triage.py
+│   │       ├── agent2_analyst.py
+│   │       ├── agent3_synthesizer.py
+│   │       └── agent4_reporter.py
+│   ├── generated_reports/      # PDF reports written here (gitignored)
+│   └── test_malicious.apk      # Sample APK for testing
 └── frontend/
     ├── src/
-    │   ├── App.jsx               # App state, navigation, API calls
+    │   ├── App.jsx             # App state, navigation, API calls
     │   ├── components/Navbar.jsx
     │   └── pages/
     │       ├── UploadPage.jsx
     │       ├── LoadingPage.jsx
     │       └── ResultsPage.jsx
-    ├── vite.config.js            # Dev proxy config
-    └── .env                       # VITE_API_URL
+    ├── vite.config.js          # Dev proxy config
+    └── .env                    # VITE_API_URL
 ```
 
 ---

@@ -182,7 +182,7 @@ async def analyze_full(file: UploadFile = File(...)):
         # 5. Run AI pipeline
         logger.info("Step 5: Running AI analysis pipeline...")
         try:
-            ai_results = run_full_ai_pipeline(analysis_json)
+            ai_results = run_full_ai_pipeline(analysis_json, jadx_dir=jadx_dir)
         except Exception as e:
             logger.exception("AI pipeline failed for '%s'", file.filename)
             raise HTTPException(status_code=500, detail=f"AI pipeline failed: {e}")

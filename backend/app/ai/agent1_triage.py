@@ -58,9 +58,12 @@ def _call_groq(user_prompt: str) -> str:
             time.sleep(5)
 
 
-def run_triage_agent(analysis_json: dict) -> dict:
+def run_triage_agent(analysis_json: dict, code_snippet: str = "") -> dict:
     apk_data = json.dumps(analysis_json, indent=2)
     user_prompt = USER_PROMPT_TEMPLATE.format(apk_data=apk_data)
+
+    if code_snippet:
+        user_prompt += f"\n\nDECOMPILED CODE SNIPPETS (suspicious files only):\n{code_snippet}"
 
     try:
         content = _call_groq(user_prompt)

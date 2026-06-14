@@ -32,6 +32,7 @@ Respond with ONLY this JSON structure:
 "behavioral_pattern": "Based on permissions + network indicators + fingerprint match, describe the likely attack chain: how would this malware actually attack a victim step by step?",
 "banking_impact": "Specific impact on banking customers — what can the attacker steal or do to bank accounts?",
 "impersonation_analysis": "Is this app pretending to be a legitimate app or bank? Explain the deception technique used.",
+"code_analysis": "what suspicious logic was found in the actual code",
 "technical_indicators": ["list", "of", "key", "technical", "red", "flags", "as", "short", "strings"]
 }}"""
 
@@ -41,6 +42,7 @@ FALLBACK_RESULT = {
     "behavioral_pattern": "",
     "banking_impact": "",
     "impersonation_analysis": "",
+    "code_analysis": "",
     "technical_indicators": [],
     "error": "Failed to parse Groq response as JSON after retry.",
 }
@@ -93,8 +95,11 @@ def _call_groq(user_prompt: str) -> str:
             time.sleep(5)
 
 
-def run_analyst_agent(analysis_json: dict, triage_result: dict) -> dict:
+def run_analyst_agent(analysis_json: dict, triage_result: dict, code_snippet: str = "") -> dict:
     user_prompt = _build_user_prompt(analysis_json, triage_result)
+
+    if code_snippet:
+        user_prompt += f"\n\nDECOMPILED CODE SNIPPETS (suspicious files only):\n{code_snippet}"
 
     try:
         content = _call_groq(user_prompt)

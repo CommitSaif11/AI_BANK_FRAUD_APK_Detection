@@ -1,1 +1,5 @@
 .claude/
+backend/apk_analysis_*/
+backend/test_output/
+backend/test_jadx_output/
+backend/tools/

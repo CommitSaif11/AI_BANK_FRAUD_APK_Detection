@@ -4,14 +4,19 @@ from app.ai.agent1_triage import run_triage_agent
 from app.ai.agent2_analyst import run_analyst_agent
 from app.ai.agent3_synthesizer import run_synthesizer_agent
 from app.ai.agent4_reporter import run_reporter_agent
+from app.extraction.code_extractor import extract_suspicious_code
 
 
-def run_full_ai_pipeline(analysis_json: dict) -> dict:
-    triage_result = run_triage_agent(analysis_json)
+def run_full_ai_pipeline(analysis_json: dict, jadx_dir: str = None) -> dict:
+    code_snippet = ""
+    if jadx_dir:
+        code_snippet = extract_suspicious_code(jadx_dir)
+
+    triage_result = run_triage_agent(analysis_json, code_snippet=code_snippet)
     print("Agent 1 Triage complete")
     time.sleep(3)
 
-    analyst_result = run_analyst_agent(analysis_json, triage_result)
+    analyst_result = run_analyst_agent(analysis_json, triage_result, code_snippet=code_snippet)
     print("Agent 2 Analysis complete")
     time.sleep(3)
 

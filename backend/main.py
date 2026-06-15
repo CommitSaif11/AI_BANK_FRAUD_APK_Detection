@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.extraction.extractor import extract_apk_info
+from app.extraction.reverse_engineer import decompile_apk
 from app.scoring.heuristics import score_permissions
 from app.scoring.impersonation import check_impersonation
 from app.scoring.network_risk import check_network_risk
@@ -62,12 +63,28 @@ async def analyze(file: UploadFile = File(...)):
     try:
         logger.info("Analyzing '%s' (%d bytes)", file.filename, len(contents))
 
+        # 1. Reverse engineer the APK
+        logger.info("Step 1: Reverse engineering APK with apktool and JADX...")
+        apktool_dir, jadx_dir = decompile_apk(tmp_path)
+        if not apktool_dir or not jadx_dir:
+            logger.error("Failed to decompile APK '%s'", file.filename)
+            raise HTTPException(status_code=500, detail="Failed to decompile APK.")
+        logger.info("Reverse engineering complete.")
+        logger.info(f"  - Apktool output: {apktool_dir}")
+        logger.info(f"  - JADX output: {jadx_dir}")
+
+
+        # 2. Extract metadata with Androguard
+        logger.info("Step 2: Extracting metadata with Androguard...")
         try:
             info = extract_apk_info(tmp_path)
         except Exception:
             logger.exception("Failed to extract APK info for '%s'", file.filename)
             raise HTTPException(status_code=400, detail="Invalid or corrupted APK file")
+        logger.info("Metadata extraction complete.")
 
+        # 3. Score and analyze
+        logger.info("Step 3: Scoring and fingerprinting...")
         risk = score_permissions(info["permissions"])
         impersonation = check_impersonation(info["app_name"], info["package_name"])
         network_risk = check_network_risk(info["urls_and_ips"])
@@ -76,8 +93,7 @@ async def analyze(file: UploadFile = File(...)):
             info.get("package_name") or "",
             info.get("urls_and_ips") or [],
         )
-
-        logger.info("Analysis complete for '%s'", file.filename)
+        logger.info("Scoring complete for '%s'", file.filename)
 
         return {
             "filename": file.filename,
@@ -87,10 +103,15 @@ async def analyze(file: UploadFile = File(...)):
             "impersonation": impersonation,
             "network_risk": network_risk,
             "fingerprint_match": fingerprint_match,
+            "apktool_output_path": apktool_dir,
+            "jadx_output_path": jadx_dir,
         }
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
+        # Decompiled files are in a temp folder managed by the OS or cleaned up by the decompile_apk function on failure.
+        # If successful, we might want to manage cleanup differently, but for now, this is ok.
+
 
 
 @app.post("/analyze/full")
@@ -112,14 +133,29 @@ async def analyze_full(file: UploadFile = File(...)):
         f.write(contents)
 
     try:
-        logger.info("Analyzing '%s' (%d bytes)", file.filename, len(contents))
+        logger.info("Starting full analysis for '%s'", file.filename)
 
+        # 1. Reverse engineer the APK
+        logger.info("Step 1: Reverse engineering APK with apktool and JADX...")
+        apktool_dir, jadx_dir = decompile_apk(tmp_path)
+        if not apktool_dir or not jadx_dir:
+            logger.error("Failed to decompile APK '%s'", file.filename)
+            raise HTTPException(status_code=500, detail="Failed to decompile APK.")
+        logger.info("Reverse engineering complete.")
+        logger.info(f"  - Apktool output: {apktool_dir}")
+        logger.info(f"  - JADX output: {jadx_dir}")
+
+        # 2. Extract metadata
+        logger.info("Step 2: Extracting metadata with Androguard...")
         try:
             info = extract_apk_info(tmp_path)
         except Exception:
             logger.exception("Failed to extract APK info for '%s'", file.filename)
             raise HTTPException(status_code=400, detail="Invalid or corrupted APK file")
+        logger.info("Metadata extraction complete.")
 
+        # 3. Score and analyze (heuristics)
+        logger.info("Step 3: Scoring and fingerprinting...")
         risk = score_permissions(info["permissions"])
         impersonation = check_impersonation(info["app_name"], info["package_name"])
         network_risk = check_network_risk(info["urls_and_ips"])
@@ -128,7 +164,9 @@ async def analyze_full(file: UploadFile = File(...)):
             info.get("package_name") or "",
             info.get("urls_and_ips") or [],
         )
+        logger.info("Scoring complete.")
 
+        # 4. Build initial analysis JSON for the AI pipeline
         analysis_json = {
             "filename": file.filename,
             "size": len(contents),
@@ -137,28 +175,34 @@ async def analyze_full(file: UploadFile = File(...)):
             "impersonation": impersonation,
             "network_risk": network_risk,
             "fingerprint_match": fingerprint_match,
+            "apktool_output_path": apktool_dir,
+            "jadx_output_path": jadx_dir,
         }
 
-        logger.info("Heuristic analysis complete for '%s', starting AI pipeline", file.filename)
+        # 5. Run AI pipeline
+        logger.info("Step 5: Running AI analysis pipeline...")
+        try:
+            ai_results = run_full_ai_pipeline(analysis_json, jadx_dir=jadx_dir)
+        except Exception as e:
+            logger.exception("AI pipeline failed for '%s'", file.filename)
+            raise HTTPException(status_code=500, detail=f"AI pipeline failed: {e}")
+        logger.info("AI analysis complete.")
 
-        ai_result = run_full_ai_pipeline(analysis_json)
-
-        logger.info("AI pipeline complete for '%s'", file.filename)
-
-        result = {
+        # 6. Combine all results
+        full_result = {
             **analysis_json,
-            **ai_result,
+            "ai_analysis": ai_results,
         }
 
-        ANALYSIS_RESULTS[file.filename] = result
+        # Store result for PDF generation
+        ANALYSIS_RESULTS[file.filename] = full_result
+        logger.info("Full analysis complete for '%s'", file.filename)
 
-        pdf_path = os.path.join(REPORTS_DIR, f"{file.filename}_report.pdf")
-        generate_pdf_report(result, pdf_path)
-
-        return result
+        return full_result
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
+        # Decompiled files are in a temp folder managed by the OS or cleaned up by the decompile_apk function on failure.
 
 
 @app.get("/reports")

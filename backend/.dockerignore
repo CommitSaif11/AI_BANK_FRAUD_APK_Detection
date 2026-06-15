@@ -1,0 +1,9 @@
+venv/
+tools/
+apk_analysis_*/
+generated_reports/
+test_output/
+test_jadx_output/
+__pycache__/
+*.pyc
+.env

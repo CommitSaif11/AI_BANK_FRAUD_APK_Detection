@@ -66,8 +66,25 @@ const FEATURES = [
 function UploadPage({ onFileSelect, error: externalError }) {
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState("");
+  const [demoLoading, setDemoLoading] = useState(false);
   const displayError = error || externalError;
   const inputRef = useRef(null);
+
+  const handleDemoClick = async () => {
+    setDemoLoading(true);
+    try {
+      const response = await fetch("/test_malicious.apk");
+      const blob = await response.blob();
+      const file = new File([blob], "test_malicious.apk", {
+        type: "application/vnd.android.package-archive",
+      });
+      onFileSelect(file);
+    } catch (err) {
+      alert("Demo file failed to load. Please try uploading manually.");
+    } finally {
+      setDemoLoading(false);
+    }
+  };
 
   const handleFile = (file) => {
     if (!file) return;
@@ -188,6 +205,35 @@ function UploadPage({ onFileSelect, error: externalError }) {
               style={{ display: "none" }}
               onChange={(e) => handleFile(e.target.files[0])}
             />
+
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", margin: "12px 0", width: "100%" }}>
+              <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.1)" }} />
+              <span style={{ color: "#475569", fontSize: "12px" }}>or</span>
+              <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.1)" }} />
+            </div>
+
+            <button
+              onClick={(e) => { e.stopPropagation(); handleDemoClick(); }}
+              disabled={demoLoading}
+              style={{
+                background: "transparent",
+                border: "1px solid rgba(239,68,68,0.4)",
+                color: "#f87171",
+                fontSize: "13px",
+                padding: "8px 20px",
+                borderRadius: "8px",
+                cursor: demoLoading ? "not-allowed" : "pointer",
+                transition: "background 0.2s",
+                width: "100%",
+              }}
+              onMouseEnter={(e) => (e.target.style.background = "rgba(239,68,68,0.1)")}
+              onMouseLeave={(e) => (e.target.style.background = "transparent")}
+            >
+              {demoLoading ? "Loading demo APK..." : "⚡ Load Demo: Fake SBI Banking Trojan"}
+            </button>
+            <p style={{ fontSize: "11px", color: "#475569", marginTop: "6px", textAlign: "center" }}>
+              Pre-loaded malicious APK for demonstration
+            </p>
           </div>
           {displayError && (
             <div style={{ color: "var(--red)", marginTop: "12px", fontSize: "13px" }}>

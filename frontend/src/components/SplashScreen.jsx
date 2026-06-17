@@ -103,18 +103,38 @@ function SplashScreen({ onComplete }) {
           transition: "opacity 0.4s ease, transform 0.4s ease",
         }}
       >
-        {[
-          { src: "https://boihackathon.cse.iith.ac.in/hackathon2026/version/images/BankOfIndia.png", label: "Bank of India" },
-          { src: "https://boihackathon.cse.iith.ac.in/hackathon2026/version/images/iith-logo.png", label: "IIT Hyderabad" },
-          { src: "https://boihackathon.cse.iith.ac.in/hackathon2026/version/images/DFS_Logo.jpg", label: "Dept. of Financial Services" },
-        ].map(({ src, label }) => (
-          <div key={label} style={{ textAlign: "center" }}>
-            <div style={{ background: "white", borderRadius: "10px", padding: "10px 18px", width: "160px", height: "70px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <img src={src} alt={label} style={{ maxHeight: "50px", maxWidth: "140px", objectFit: "contain" }} />
-            </div>
-            <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>{label}</div>
+        {/* Bank of India */}
+        <div style={{ textAlign: "center" }}>
+          <div style={{ background: "white", borderRadius: "10px", padding: "10px 18px", width: "160px", height: "70px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <img src="/logos/BankOfIndia.png" alt="Bank of India" style={{ maxHeight: "50px", maxWidth: "140px", objectFit: "contain" }} />
           </div>
-        ))}
+          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>Bank of India</div>
+        </div>
+
+        {/* IIT Hyderabad */}
+        <div style={{ textAlign: "center" }}>
+          <div style={{ background: "white", borderRadius: "10px", padding: "10px 18px", width: "160px", height: "70px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <img src="/logos/iith-logo.png" alt="IIT Hyderabad" style={{ maxHeight: "50px", maxWidth: "140px", objectFit: "contain" }} />
+          </div>
+          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>IIT Hyderabad</div>
+        </div>
+
+        {/* Dept. of Financial Services */}
+        <div style={{ textAlign: "center" }}>
+          <div style={{ background: "white", borderRadius: "10px", padding: "10px 18px", width: "160px", height: "70px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <img
+              src="/logos/DFS_Logo.jpg"
+              alt="Dept. of Financial Services"
+              style={{ maxHeight: "50px", maxWidth: "140px", objectFit: "contain" }}
+              onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
+            />
+            <div style={{ display: "none", flexDirection: "column", alignItems: "center" }}>
+              <span style={{ fontSize: "24px" }}>🏛️</span>
+              <span style={{ fontWeight: "bold", color: "#1a1a1a", fontSize: "12px" }}>DFS</span>
+            </div>
+          </div>
+          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>Dept. of Financial Services</div>
+        </div>
       </div>
     </div>
   );

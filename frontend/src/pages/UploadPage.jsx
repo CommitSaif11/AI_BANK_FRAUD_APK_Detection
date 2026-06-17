@@ -217,10 +217,10 @@ function UploadPage({ onFileSelect, error: externalError }) {
               disabled={demoLoading}
               style={{
                 background: demoLoading
-                  ? "rgba(239,68,68,0.15)"
-                  : "linear-gradient(135deg, rgba(239,68,68,0.25) 0%, rgba(220,38,38,0.35) 100%)",
-                border: "1.5px solid rgba(239,68,68,0.7)",
-                color: "#fca5a5",
+                  ? "#1e293b"
+                  : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
+                border: "1.5px solid #334155",
+                color: "#e2e8f0",
                 fontSize: "13px",
                 fontWeight: 600,
                 padding: "12px 20px",
@@ -232,20 +232,22 @@ function UploadPage({ onFileSelect, error: externalError }) {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "8px",
-                boxShadow: "0 0 16px rgba(239,68,68,0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
+                boxShadow: "0 2px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)",
                 letterSpacing: "0.01em",
               }}
               onMouseEnter={(e) => {
                 if (!demoLoading) {
-                  e.currentTarget.style.background = "linear-gradient(135deg, rgba(239,68,68,0.4) 0%, rgba(220,38,38,0.5) 100%)";
-                  e.currentTarget.style.boxShadow = "0 0 24px rgba(239,68,68,0.4), inset 0 1px 0 rgba(255,255,255,0.08)";
-                  e.currentTarget.style.borderColor = "rgba(239,68,68,0.9)";
+                  e.currentTarget.style.background = "linear-gradient(135deg, #263548 0%, #172033 100%)";
+                  e.currentTarget.style.borderColor = "#3b82f6";
+                  e.currentTarget.style.boxShadow = "0 4px 20px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.07)";
+                  e.currentTarget.style.color = "#fff";
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "linear-gradient(135deg, rgba(239,68,68,0.25) 0%, rgba(220,38,38,0.35) 100%)";
-                e.currentTarget.style.boxShadow = "0 0 16px rgba(239,68,68,0.2), inset 0 1px 0 rgba(255,255,255,0.05)";
-                e.currentTarget.style.borderColor = "rgba(239,68,68,0.7)";
+                e.currentTarget.style.background = "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)";
+                e.currentTarget.style.borderColor = "#334155";
+                e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)";
+                e.currentTarget.style.color = "#e2e8f0";
               }}
             >
               {demoLoading ? (
@@ -254,10 +256,7 @@ function UploadPage({ onFileSelect, error: externalError }) {
                   Loading demo APK...
                 </>
               ) : (
-                <>
-                  <span style={{ fontSize: "15px" }}>⚡</span>
-                  Try Demo — Fake SBI Banking Trojan
-                </>
+                "Try Demo — Fake SBI Banking Trojan"
               )}
             </button>
             <p style={{ fontSize: "11px", color: "#475569", marginTop: "8px", textAlign: "center" }}>

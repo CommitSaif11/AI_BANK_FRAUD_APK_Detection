@@ -63,6 +63,13 @@ const FEATURES = [
   },
 ];
 
+const STEPS = [
+  { n: "01", text: "Upload any suspicious APK file distributed via WhatsApp, SMS or phishing links" },
+  { n: "02", text: "Static analysis extracts permissions, certificates, DEX bytecode and network indicators" },
+  { n: "03", text: "4-Agent AI pipeline classifies threat, explains behavior and synthesizes risk score" },
+  { n: "04", text: "Download bank-grade PDF investigation report with recommended actions" },
+];
+
 function UploadPage({ onFileSelect, error: externalError }) {
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState("");
@@ -113,6 +120,8 @@ function UploadPage({ onFileSelect, error: externalError }) {
           background: "rgba(255,255,255,0.03)",
           borderTop: "0.5px solid rgba(255,255,255,0.08)",
           borderBottom: "0.5px solid rgba(255,255,255,0.08)",
+          opacity: 0,
+          animation: "fadeInUp 0.5s ease 0.1s forwards",
         }}
       >
         {STATS.map((s) => (
@@ -121,25 +130,59 @@ function UploadPage({ onFileSelect, error: externalError }) {
       </div>
 
       <div className="hero-grid">
+        {/* Left column */}
         <div>
-          <h1 style={{ fontSize: "32px", fontWeight: 500, lineHeight: 1.3, color: "var(--text-primary)" }}>
+          <h1
+            style={{
+              fontSize: "32px",
+              fontWeight: 500,
+              lineHeight: 1.3,
+              color: "var(--text-primary)",
+              opacity: 0,
+              animation: "fadeInUp 0.6s ease 0.2s forwards",
+            }}
+          >
             Detect fraudulent APKs before they reach your customers
           </h1>
-          <p style={{ color: "var(--text-secondary)", marginTop: "16px", fontSize: "14px", lineHeight: 1.6 }}>
+
+          <p
+            style={{
+              color: "var(--text-secondary)",
+              marginTop: "16px",
+              fontSize: "14px",
+              lineHeight: 1.6,
+              opacity: 0,
+              animation: "fadeInUp 0.6s ease 0.3s forwards",
+            }}
+          >
             A Generative AI-powered system built for Bank of India &amp; Department of Financial Services to combat mobile banking fraud.
           </p>
 
           <div style={{ marginTop: "24px" }}>
-            <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
+            <div
+              style={{
+                fontSize: "11px",
+                color: "var(--text-muted)",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                marginBottom: "14px",
+                opacity: 0,
+                animation: "fadeInUp 0.6s ease 0.35s forwards",
+              }}
+            >
               How it works
             </div>
-            {[
-              { n: "01", text: "Upload any suspicious APK file distributed via WhatsApp, SMS or phishing links" },
-              { n: "02", text: "Static analysis extracts permissions, certificates, DEX bytecode and network indicators" },
-              { n: "03", text: "4-Agent AI pipeline classifies threat, explains behavior and synthesizes risk score" },
-              { n: "04", text: "Download bank-grade PDF investigation report with recommended actions" },
-            ].map(({ n, text }) => (
-              <div key={n} style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
+            {STEPS.map(({ n, text }, i) => (
+              <div
+                key={n}
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  marginBottom: "12px",
+                  opacity: 0,
+                  animation: `fadeInUp 0.5s ease ${0.4 + i * 0.1}s forwards`,
+                }}
+              >
                 <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "rgba(59,130,246,0.2)", color: "#60a5fa", fontSize: "11px", fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   {n}
                 </div>
@@ -149,15 +192,19 @@ function UploadPage({ onFileSelect, error: externalError }) {
           </div>
         </div>
 
-        <div>
+        {/* Right column — upload zone */}
+        <div
+          style={{
+            opacity: 0,
+            animation: "slideInRight 0.6s ease 0.3s forwards",
+          }}
+        >
           <div
             onClick={() => inputRef.current?.click()}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setDragOver(true);
-            }}
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={handleDrop}
+            className={dragOver ? "" : "upload-zone-pulse"}
             style={{
               border: `1.5px dashed ${dragOver ? "var(--blue)" : "var(--border-accent)"}`,
               borderRadius: "var(--radius-lg)",
@@ -171,20 +218,11 @@ function UploadPage({ onFileSelect, error: externalError }) {
             <div style={{ marginTop: "12px", fontWeight: 500 }}>
               Drop your APK file here
             </div>
-            <div
-              style={{
-                fontSize: "12px",
-                color: "var(--text-muted)",
-                marginTop: "4px",
-              }}
-            >
+            <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>
               .apk files only · max 100MB
             </div>
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                inputRef.current?.click();
-              }}
+              onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}
               style={{
                 marginTop: "20px",
                 padding: "10px 20px",
@@ -271,6 +309,7 @@ function UploadPage({ onFileSelect, error: externalError }) {
         </div>
       </div>
 
+      {/* Feature cards */}
       <div
         className="feature-grid"
         style={{
@@ -280,27 +319,22 @@ function UploadPage({ onFileSelect, error: externalError }) {
           padding: "0 40px 60px",
         }}
       >
-        {FEATURES.map((f) => (
+        {FEATURES.map((f, i) => (
           <div
             key={f.title}
-            className="hover-card"
+            className="hover-card feature-card"
             style={{
               background: "var(--bg-card)",
               border: "0.5px solid var(--border)",
               borderRadius: "var(--radius-md)",
               padding: "20px",
+              opacity: 0,
+              animation: `fadeInUp 0.5s ease ${0.5 + i * 0.1}s forwards`,
             }}
           >
             <div style={{ fontSize: "24px" }}>{f.icon}</div>
             <div style={{ fontWeight: 500, marginTop: "10px" }}>{f.title}</div>
-            <div
-              style={{
-                fontSize: "13px",
-                color: "var(--text-secondary)",
-                marginTop: "6px",
-                lineHeight: 1.5,
-              }}
-            >
+            <div style={{ fontSize: "13px", color: "var(--text-secondary)", marginTop: "6px", lineHeight: 1.5 }}>
               {f.desc}
             </div>
           </div>

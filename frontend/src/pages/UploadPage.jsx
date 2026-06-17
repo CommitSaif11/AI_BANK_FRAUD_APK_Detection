@@ -105,21 +105,31 @@ function UploadPage({ onFileSelect, error: externalError }) {
 
       <div className="hero-grid">
         <div>
-          <h1
-            style={{
-              fontSize: "32px",
-              fontWeight: 500,
-              lineHeight: 1.3,
-              color: "var(--text-primary)",
-            }}
-          >
+          <h1 style={{ fontSize: "32px", fontWeight: 500, lineHeight: 1.3, color: "var(--text-primary)" }}>
             Detect fraudulent APKs before they reach your customers
           </h1>
-          <p style={{ color: "var(--text-secondary)", marginTop: "16px" }}>
-            ThreatLens uses a 4-agent AI pipeline to analyze permissions,
-            network behavior, and malware signatures, generating bank-grade
-            investigation reports for every Android application you upload.
+          <p style={{ color: "var(--text-secondary)", marginTop: "16px", fontSize: "14px", lineHeight: 1.6 }}>
+            A Generative AI-powered system built for Bank of India &amp; Department of Financial Services to combat mobile banking fraud.
           </p>
+
+          <div style={{ marginTop: "24px" }}>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
+              How it works
+            </div>
+            {[
+              { n: "01", text: "Upload any suspicious APK file distributed via WhatsApp, SMS or phishing links" },
+              { n: "02", text: "Static analysis extracts permissions, certificates, DEX bytecode and network indicators" },
+              { n: "03", text: "4-Agent AI pipeline classifies threat, explains behavior and synthesizes risk score" },
+              { n: "04", text: "Download bank-grade PDF investigation report with recommended actions" },
+            ].map(({ n, text }) => (
+              <div key={n} style={{ display: "flex", gap: "12px", marginBottom: "12px" }}>
+                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "rgba(59,130,246,0.2)", color: "#60a5fa", fontSize: "11px", fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  {n}
+                </div>
+                <span style={{ fontSize: "13px", color: "#94a3b8", lineHeight: 1.5 }}>{text}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div>

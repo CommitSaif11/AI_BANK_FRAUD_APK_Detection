@@ -1,4 +1,44 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+
+const STATS = [
+  { target: 15, suffix: "+", label: "Dangerous Permissions Tracked" },
+  { target: 5, suffix: "", label: "Malware Families in Database" },
+  { target: 4, suffix: "", label: "AI Agents in Pipeline" },
+  { target: 98, suffix: "/100", label: "Highest Risk Score Detected" },
+];
+
+function StatCounter({ target, suffix, label }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const duration = 1500;
+    const steps = 40;
+    const increment = target / steps;
+    const interval = duration / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, interval);
+    return () => clearInterval(timer);
+  }, [target]);
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <div style={{ fontSize: "28px", fontWeight: 600, color: "#3b82f6" }}>
+        {count}{suffix}
+      </div>
+      <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginTop: "4px" }}>
+        {label}
+      </div>
+    </div>
+  );
+}
 
 const FEATURES = [
   {
@@ -47,6 +87,22 @@ function UploadPage({ onFileSelect, error: externalError }) {
 
   return (
     <div className="fade-in">
+      {/* Stats bar */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          padding: "20px 40px",
+          background: "rgba(255,255,255,0.03)",
+          borderTop: "0.5px solid rgba(255,255,255,0.08)",
+          borderBottom: "0.5px solid rgba(255,255,255,0.08)",
+        }}
+      >
+        {STATS.map((s) => (
+          <StatCounter key={s.label} target={s.target} suffix={s.suffix} label={s.label} />
+        ))}
+      </div>
+
       <div className="hero-grid">
         <div>
           <h1

@@ -217,10 +217,10 @@ function UploadPage({ onFileSelect, error: externalError }) {
               disabled={demoLoading}
               style={{
                 background: demoLoading
-                  ? "#1e293b"
-                  : "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
-                border: "1.5px solid #334155",
-                color: "#e2e8f0",
+                  ? "#2d0f0f"
+                  : "linear-gradient(135deg, #3b0f0f 0%, #2d0a0a 100%)",
+                border: "1.5px solid #7f1d1d",
+                color: "#fca5a5",
                 fontSize: "13px",
                 fontWeight: 600,
                 padding: "12px 20px",
@@ -232,22 +232,22 @@ function UploadPage({ onFileSelect, error: externalError }) {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "8px",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)",
+                boxShadow: "0 2px 12px rgba(127,29,29,0.3), inset 0 1px 0 rgba(255,255,255,0.04)",
                 letterSpacing: "0.01em",
               }}
               onMouseEnter={(e) => {
                 if (!demoLoading) {
-                  e.currentTarget.style.background = "linear-gradient(135deg, #263548 0%, #172033 100%)";
-                  e.currentTarget.style.borderColor = "#3b82f6";
-                  e.currentTarget.style.boxShadow = "0 4px 20px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.07)";
-                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.background = "linear-gradient(135deg, #4c1414 0%, #3b0f0f 100%)";
+                  e.currentTarget.style.borderColor = "#b91c1c";
+                  e.currentTarget.style.boxShadow = "0 4px 20px rgba(185,28,28,0.35), inset 0 1px 0 rgba(255,255,255,0.06)";
+                  e.currentTarget.style.color = "#fecaca";
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)";
-                e.currentTarget.style.borderColor = "#334155";
-                e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)";
-                e.currentTarget.style.color = "#e2e8f0";
+                e.currentTarget.style.background = "linear-gradient(135deg, #3b0f0f 0%, #2d0a0a 100%)";
+                e.currentTarget.style.borderColor = "#7f1d1d";
+                e.currentTarget.style.boxShadow = "0 2px 12px rgba(127,29,29,0.3), inset 0 1px 0 rgba(255,255,255,0.04)";
+                e.currentTarget.style.color = "#fca5a5";
               }}
             >
               {demoLoading ? (

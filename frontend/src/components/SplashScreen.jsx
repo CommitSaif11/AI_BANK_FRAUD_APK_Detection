@@ -103,33 +103,18 @@ function SplashScreen({ onComplete }) {
           transition: "opacity 0.4s ease, transform 0.4s ease",
         }}
       >
-        {/* Bank of India */}
-        <div style={{ textAlign: "center" }}>
-          <div style={{ background: "#003087", borderRadius: "8px", padding: "12px 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "160px", height: "70px" }}>
-            <span style={{ color: "white", fontWeight: "700", fontSize: "15px", letterSpacing: "0.02em" }}>Bank of India</span>
-            <span style={{ color: "#87CEEB", fontSize: "9px", marginTop: "3px", fontStyle: "italic" }}>Relationship beyond banking</span>
+        {[
+          { src: "https://boihackathon.cse.iith.ac.in/hackathon2026/version/images/BankOfIndia.png", label: "Bank of India" },
+          { src: "https://boihackathon.cse.iith.ac.in/hackathon2026/version/images/iith-logo.png", label: "IIT Hyderabad" },
+          { src: "https://boihackathon.cse.iith.ac.in/hackathon2026/version/images/DFS_Logo.jpg", label: "Dept. of Financial Services" },
+        ].map(({ src, label }) => (
+          <div key={label} style={{ textAlign: "center" }}>
+            <div style={{ background: "white", borderRadius: "10px", padding: "10px 18px", width: "160px", height: "70px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <img src={src} alt={label} style={{ maxHeight: "50px", maxWidth: "140px", objectFit: "contain" }} />
+            </div>
+            <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>{label}</div>
           </div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>Bank of India</div>
-        </div>
-
-        {/* IIT Hyderabad */}
-        <div style={{ textAlign: "center" }}>
-          <div style={{ background: "white", borderRadius: "8px", padding: "12px 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "160px", height: "70px" }}>
-            <span style={{ color: "#FF6B00", fontWeight: "800", fontSize: "18px", letterSpacing: "0.05em" }}>IIT</span>
-            <span style={{ color: "#1a1a1a", fontWeight: "600", fontSize: "11px", letterSpacing: "0.08em" }}>HYDERABAD</span>
-          </div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>IIT Hyderabad</div>
-        </div>
-
-        {/* Dept of Financial Services */}
-        <div style={{ textAlign: "center" }}>
-          <div style={{ background: "white", borderRadius: "8px", padding: "12px 16px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "160px", height: "70px" }}>
-            <span style={{ fontSize: "18px" }}>🏛️</span>
-            <span style={{ color: "#1a1a1a", fontWeight: "700", fontSize: "9px", textAlign: "center", lineHeight: "1.3", marginTop: "3px" }}>DEPT. OF FINANCIAL SERVICES</span>
-            <span style={{ color: "#666", fontSize: "8px" }}>Govt. of India</span>
-          </div>
-          <div style={{ fontSize: "11px", color: "#64748b", marginTop: "8px" }}>Dept. of Financial Services</div>
-        </div>
+        ))}
       </div>
     </div>
   );

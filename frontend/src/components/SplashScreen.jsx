@@ -2,47 +2,28 @@ import { useState, useEffect } from "react";
 
 function SplashScreen({ onComplete }) {
   const [logoVisible, setLogoVisible] = useState(false);
+  const [lineVisible, setLineVisible] = useState(false);
   const [builtForVisible, setBuiltForVisible] = useState(false);
-  const [inst1Visible, setInst1Visible] = useState(false);
-  const [sep1Visible, setSep1Visible] = useState(false);
-  const [inst2Visible, setInst2Visible] = useState(false);
-  const [sep2Visible, setSep2Visible] = useState(false);
-  const [inst3Visible, setInst3Visible] = useState(false);
+  const [institutionsVisible, setInstitutionsVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
 
   useEffect(() => {
     const timers = [
       setTimeout(() => setLogoVisible(true), 100),
-      setTimeout(() => setBuiltForVisible(true), 800),
-      setTimeout(() => setInst1Visible(true), 1100),
-      setTimeout(() => setSep1Visible(true), 1500),
-      setTimeout(() => setInst2Visible(true), 1500),
-      setTimeout(() => setSep2Visible(true), 1900),
-      setTimeout(() => setInst3Visible(true), 1900),
-      setTimeout(() => setFadingOut(true), 2500),
+      setTimeout(() => setLineVisible(true), 800),
+      setTimeout(() => setBuiltForVisible(true), 1100),
+      setTimeout(() => setInstitutionsVisible(true), 1400),
+      setTimeout(() => setFadingOut(true), 2600),
       setTimeout(() => onComplete(), 3000),
     ];
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
 
-  const instStyle = (visible) => ({
-    fontSize: "16px",
-    fontWeight: 500,
-    color: "#e2e8f0",
-    opacity: visible ? 1 : 0,
-    transform: visible ? "translateY(0)" : "translateY(10px)",
-    transition: "opacity 0.4s ease, transform 0.4s ease",
-  });
-
-  const dotStyle = (visible) => ({
-    width: "4px",
-    height: "4px",
-    borderRadius: "50%",
-    background: "#3b82f6",
-    opacity: visible ? 1 : 0,
-    transition: "opacity 0.3s ease",
-    flexShrink: 0,
-  });
+  const institutions = [
+    { src: "/logos/bank-of-india.png", alt: "Bank of India", label: "Bank of India" },
+    { src: "/logos/iit_hyderabad_logo.jpg", alt: "IIT Hyderabad", label: "IIT Hyderabad" },
+    { src: "/logos/dept_of_financial_services.jfif", alt: "Dept. of Financial Services", label: "Dept. of Financial Services" },
+  ];
 
   return (
     <div
@@ -59,7 +40,7 @@ function SplashScreen({ onComplete }) {
         transition: "opacity 0.5s ease",
       }}
     >
-      {/* Logo row */}
+      {/* ThreatLens logo */}
       <div
         style={{
           display: "flex",
@@ -82,17 +63,22 @@ function SplashScreen({ onComplete }) {
         >
           <path d="M12 2 L20 5 V11 C20 16 16.5 19.5 12 22 C7.5 19.5 4 16 4 11 V5 Z" />
         </svg>
-        <span
-          style={{
-            fontSize: "36px",
-            fontWeight: 600,
-            color: "#fff",
-            letterSpacing: "-0.02em",
-          }}
-        >
+        <span style={{ fontSize: "36px", fontWeight: 600, color: "#fff", letterSpacing: "-0.02em" }}>
           ThreatLens
         </span>
       </div>
+
+      {/* Animated line */}
+      <div
+        style={{
+          height: "2px",
+          width: lineVisible ? "300px" : "0px",
+          background: "#3b82f6",
+          borderRadius: "2px",
+          marginTop: "20px",
+          transition: "width 0.5s ease",
+        }}
+      />
 
       {/* Built for */}
       <div
@@ -101,8 +87,8 @@ function SplashScreen({ onComplete }) {
           color: "#64748b",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
-          marginTop: "24px",
-          marginBottom: "16px",
+          marginTop: "20px",
+          marginBottom: "20px",
           opacity: builtForVisible ? 1 : 0,
           transition: "opacity 0.4s ease",
         }}
@@ -110,21 +96,44 @@ function SplashScreen({ onComplete }) {
         Built for
       </div>
 
-      {/* Institution names */}
+      {/* Logo cards */}
       <div
         style={{
           display: "flex",
-          alignItems: "center",
-          gap: "16px",
-          flexWrap: "wrap",
+          gap: "24px",
+          alignItems: "flex-start",
           justifyContent: "center",
+          opacity: institutionsVisible ? 1 : 0,
+          transform: institutionsVisible ? "translateY(0)" : "translateY(10px)",
+          transition: "opacity 0.4s ease, transform 0.4s ease",
         }}
       >
-        <span style={instStyle(inst1Visible)}>Bank of India</span>
-        <div style={dotStyle(sep1Visible)} />
-        <span style={instStyle(inst2Visible)}>IIT Hyderabad</span>
-        <div style={dotStyle(sep2Visible)} />
-        <span style={instStyle(inst3Visible)}>Dept. of Financial Services, Govt. of India</span>
+        {institutions.map(({ src, alt, label }) => (
+          <div key={label} style={{ textAlign: "center" }}>
+            <div
+              style={{
+                background: "#ffffff",
+                borderRadius: "12px",
+                padding: "12px 20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "70px",
+                width: "160px",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+              }}
+            >
+              <img
+                src={src}
+                alt={alt}
+                style={{ maxHeight: "50px", maxWidth: "140px", objectFit: "contain" }}
+              />
+            </div>
+            <div style={{ fontSize: "11px", color: "#64748b", textAlign: "center", marginTop: "8px" }}>
+              {label}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

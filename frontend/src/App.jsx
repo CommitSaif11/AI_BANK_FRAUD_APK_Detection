@@ -37,7 +37,16 @@ function App() {
       });
 
       clearInterval(stepTimer);
-      setAnalysisData(response.data);
+      const processedData = {
+        ...response.data,
+        triage: response.data.ai_analysis?.triage,
+        analysis: response.data.ai_analysis?.analysis,
+        risk_assessment: response.data.ai_analysis?.risk_assessment,
+        report: response.data.ai_analysis?.report,
+        final_risk_score: response.data.ai_analysis?.final_risk_score || response.data.final_risk_score,
+        risk_level: response.data.ai_analysis?.risk_level || response.data.risk_level,
+      };
+      setAnalysisData(processedData);
       setPage("results");
     } catch (err) {
       clearInterval(stepTimer);

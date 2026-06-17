@@ -179,7 +179,7 @@ function ResultsPage({ data, filename, onReset }) {
           }}
         >
           <div style={{ fontSize: "56px", fontWeight: 600, lineHeight: 1 }}>
-            {data?.final_risk_score ?? "--"}
+            {riskAssessment?.final_risk_score ?? data?.final_risk_score ?? "--"}
           </div>
           <div style={{ fontSize: "12px", color: "var(--text-secondary)", marginTop: "4px" }}>
             Risk Score
@@ -237,10 +237,10 @@ function ResultsPage({ data, filename, onReset }) {
         }}
       >
         {[
-          { label: "01 Triage", value: triage?.threat_category || "—" },
-          { label: "02 Code Analyst", value: (analysis?.technical_indicators || [])[0] || "—" },
+          { label: "01 Triage", value: triage?.threat_category || "Triage complete" },
+          { label: "02 Code Analyst", value: analysis?.technical_indicators?.[0] || "Analysis complete" },
           { label: "03 Risk Synthesis", value: `Score: ${riskAssessment?.final_risk_score ?? data?.final_risk_score ?? "—"}` },
-          { label: "04 Report Writer", value: (report?.report_title || "—").slice(0, 40) },
+          { label: "04 Report Writer", value: report?.report_title?.substring(0, 50) || "Report complete" },
         ].map((item, i) => (
           <div
             key={item.label}

@@ -279,6 +279,192 @@ function ResultsPage({ data, filename, onReset }) {
         ))}
       </div>
 
+      {/* SECTION 3b — AI Pipeline Breakdown */}
+      <div style={{ marginTop: "24px" }}>
+        <div style={{ fontSize: "11px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
+          AI Pipeline Breakdown
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+
+          {/* Card 1 — Triage Agent */}
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "20px", borderLeft: "3px solid #3b82f6" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "4px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ background: "rgba(59,130,246,0.15)", color: "#60a5fa", fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: "4px" }}>01</span>
+                <span style={{ fontWeight: 500, fontSize: "14px" }}>Triage Agent</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#22c55e" }} />
+                <span style={{ fontSize: "11px", color: "#4ade80" }}>Complete</span>
+              </div>
+            </div>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "16px" }}>Threat Classification &amp; Priority Assessment</div>
+
+            {[
+              { label: "Threat Category", value: triage?.threat_category, type: "badge", badgeColor: triage?.threat_category === "CLEAN" ? "green" : triage?.threat_category === "UNKNOWN" ? "amber" : "red" },
+              { label: "Investigation Priority", value: triage?.investigation_priority, type: "badge", badgeColor: triage?.investigation_priority === "CRITICAL" ? "red" : triage?.investigation_priority === "HIGH" ? "amber" : "blue" },
+            ].map(({ label, value, badgeColor }) => (
+              <div key={label} style={{ marginBottom: "12px" }}>
+                <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>{label}</div>
+                {value
+                  ? <span className={`badge badge-${badgeColor}`}>{value}</span>
+                  : <span style={{ color: "var(--text-muted)", fontSize: "13px" }}>—</span>}
+              </div>
+            ))}
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Target Victims</div>
+              <div style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.5 }}>{triage?.target_victim_profile || "—"}</div>
+            </div>
+            <div>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Triage Summary</div>
+              <div style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6 }}>{triage?.triage_summary || "—"}</div>
+            </div>
+          </div>
+
+          {/* Card 2 — Code Analyst */}
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "20px", borderLeft: "3px solid #8b5cf6" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "4px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ background: "rgba(139,92,246,0.15)", color: "#a78bfa", fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: "4px" }}>02</span>
+                <span style={{ fontWeight: 500, fontSize: "14px" }}>Code Analyst Agent</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#22c55e" }} />
+                <span style={{ fontSize: "11px", color: "#4ade80" }}>Complete</span>
+              </div>
+            </div>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "16px" }}>Behavioral Analysis &amp; Technical Explanation</div>
+
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Permission Analysis</div>
+              <div style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: 1.6 }}>{analysis?.permission_analysis || "—"}</div>
+            </div>
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Attack Chain</div>
+              <div style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: 1.6 }}>{analysis?.behavioral_pattern || "—"}</div>
+            </div>
+            <div>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "6px" }}>Technical Indicators</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                {(analysis?.technical_indicators || []).length === 0
+                  ? <span style={{ color: "var(--text-muted)", fontSize: "13px" }}>None detected</span>
+                  : (analysis?.technical_indicators || []).map((ind, i) => (
+                    <span key={i} style={{ fontSize: "11px", padding: "2px 8px", background: "rgba(239,68,68,0.1)", color: "#f87171", border: "0.5px solid rgba(239,68,68,0.2)", borderRadius: "4px" }}>{ind}</span>
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3 — Risk Synthesizer */}
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "20px", borderLeft: "3px solid #f59e0b" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "4px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ background: "rgba(245,158,11,0.15)", color: "#fbbf24", fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: "4px" }}>03</span>
+                <span style={{ fontWeight: 500, fontSize: "14px" }}>Risk Synthesizer Agent</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#22c55e" }} />
+                <span style={{ fontSize: "11px", color: "#4ade80" }}>Complete</span>
+              </div>
+            </div>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "16px" }}>Risk Score Calculation &amp; Verdict</div>
+
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Final Verdict</div>
+              <div style={{ fontSize: "14px", fontWeight: 500, color: "#fff" }}>{riskAssessment?.verdict || "—"}</div>
+            </div>
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Confidence Level</div>
+              {riskAssessment?.confidence_in_assessment
+                ? <span className={`badge badge-${riskAssessment.confidence_in_assessment === "HIGH" ? "green" : riskAssessment.confidence_in_assessment === "MEDIUM" ? "amber" : "red"}`}>{riskAssessment.confidence_in_assessment}</span>
+                : <span style={{ color: "var(--text-muted)", fontSize: "13px" }}>—</span>}
+            </div>
+            {riskAssessment?.score_breakdown && (
+              <div style={{ marginBottom: "12px" }}>
+                <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "6px" }}>Score Breakdown</div>
+                {[
+                  { label: "Heuristic Engine", val: riskAssessment.score_breakdown?.heuristic_component },
+                  { label: "AI Analysis", val: riskAssessment.score_breakdown?.ai_analysis_component },
+                  { label: "Fingerprint Match", val: riskAssessment.score_breakdown?.fingerprint_component },
+                ].map(({ label, val }) => (
+                  <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", color: "var(--text-muted)", marginBottom: "4px" }}>
+                    <span>{label}</span><span>{val ?? "—"}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "6px" }}>Recommended Actions</div>
+              {(riskAssessment?.recommended_actions || []).map((a, i) => (
+                <div key={i} style={{ display: "flex", gap: "8px", marginBottom: "6px", alignItems: "flex-start" }}>
+                  <span style={{ background: "rgba(245,158,11,0.15)", color: "#fbbf24", fontSize: "10px", fontWeight: 600, padding: "1px 6px", borderRadius: "4px", flexShrink: 0, marginTop: "1px" }}>{i + 1}</span>
+                  <span style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: 1.5 }}>{a}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 4 — Report Writer */}
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "0.5px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "20px", borderLeft: "3px solid #22c55e" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "4px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ background: "rgba(34,197,94,0.15)", color: "#4ade80", fontSize: "11px", fontWeight: 600, padding: "2px 8px", borderRadius: "4px" }}>04</span>
+                <span style={{ fontWeight: 500, fontSize: "14px" }}>Report Writer Agent</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#22c55e" }} />
+                <span style={{ fontSize: "11px", color: "#4ade80" }}>Complete</span>
+              </div>
+            </div>
+            <div style={{ fontSize: "11px", color: "var(--text-muted)", marginBottom: "16px" }}>Formal Investigation Report Generation</div>
+
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Report Title</div>
+              <div style={{ fontSize: "14px", fontWeight: 500, color: "#fff" }}>{report?.report_title || "—"}</div>
+            </div>
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Executive Summary</div>
+              <div style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: 1.6 }}>{report?.executive_summary || "—"}</div>
+            </div>
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Impact Assessment</div>
+              <div style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: 1.6 }}>{report?.impact_assessment || "—"}</div>
+            </div>
+            {report?.customer_communication && (
+              <div style={{ marginBottom: "12px" }}>
+                <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Customer Advisory</div>
+                <div style={{ background: "rgba(34,197,94,0.06)", border: "0.5px solid rgba(34,197,94,0.2)", borderRadius: "8px", padding: "12px", fontSize: "13px", color: "#4ade80", lineHeight: 1.6 }}>
+                  {report.customer_communication}
+                </div>
+              </div>
+            )}
+            {(report?.indicators_of_compromise || []).length > 0 && (
+              <div>
+                <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "6px" }}>Indicators of Compromise</div>
+                {(report.indicators_of_compromise || []).map((ioc, i) => (
+                  <div key={i} style={{ display: "flex", gap: "8px", marginBottom: "4px" }}>
+                    <span style={{ color: "#f87171", flexShrink: 0 }}>•</span>
+                    <span style={{ fontSize: "12px", color: "#94a3b8" }}>{ioc}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Info box */}
+        <div style={{ background: "rgba(59,130,246,0.06)", border: "0.5px solid rgba(59,130,246,0.15)", borderRadius: "12px", padding: "16px 20px", marginTop: "16px", display: "flex", gap: "12px" }}>
+          <span style={{ fontSize: "20px", flexShrink: 0 }}>🤖</span>
+          <div>
+            <div style={{ fontWeight: 500, color: "var(--blue)", marginBottom: "6px" }}>About the Multi-Agent Pipeline</div>
+            <div style={{ fontSize: "13px", color: "#94a3b8", lineHeight: 1.6 }}>
+              ThreatLens uses a sequential 4-agent AI architecture powered by Llama 3.1 70B via Groq. Each agent has a specialized role — unlike single-prompt AI tools, this pipeline produces higher quality analysis by breaking the problem into focused subtasks: threat classification, technical explanation, risk synthesis, and professional report writing.
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* SECTION 4 — Three score cards */}
       <div className="results-three-col" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginTop: "24px" }}>
         <ScoreCard icon="🔐" title="Permission Risk" score={risk?.permission_risk_score || 0} />

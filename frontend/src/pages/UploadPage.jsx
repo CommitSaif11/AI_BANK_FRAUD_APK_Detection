@@ -216,23 +216,52 @@ function UploadPage({ onFileSelect, error: externalError }) {
               onClick={(e) => { e.stopPropagation(); handleDemoClick(); }}
               disabled={demoLoading}
               style={{
-                background: "transparent",
-                border: "1px solid rgba(239,68,68,0.4)",
-                color: "#f87171",
+                background: demoLoading
+                  ? "rgba(239,68,68,0.15)"
+                  : "linear-gradient(135deg, rgba(239,68,68,0.25) 0%, rgba(220,38,38,0.35) 100%)",
+                border: "1.5px solid rgba(239,68,68,0.7)",
+                color: "#fca5a5",
                 fontSize: "13px",
-                padding: "8px 20px",
-                borderRadius: "8px",
+                fontWeight: 600,
+                padding: "12px 20px",
+                borderRadius: "10px",
                 cursor: demoLoading ? "not-allowed" : "pointer",
-                transition: "background 0.2s",
+                transition: "all 0.2s ease",
                 width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                boxShadow: "0 0 16px rgba(239,68,68,0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
+                letterSpacing: "0.01em",
               }}
-              onMouseEnter={(e) => (e.target.style.background = "rgba(239,68,68,0.1)")}
-              onMouseLeave={(e) => (e.target.style.background = "transparent")}
+              onMouseEnter={(e) => {
+                if (!demoLoading) {
+                  e.currentTarget.style.background = "linear-gradient(135deg, rgba(239,68,68,0.4) 0%, rgba(220,38,38,0.5) 100%)";
+                  e.currentTarget.style.boxShadow = "0 0 24px rgba(239,68,68,0.4), inset 0 1px 0 rgba(255,255,255,0.08)";
+                  e.currentTarget.style.borderColor = "rgba(239,68,68,0.9)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "linear-gradient(135deg, rgba(239,68,68,0.25) 0%, rgba(220,38,38,0.35) 100%)";
+                e.currentTarget.style.boxShadow = "0 0 16px rgba(239,68,68,0.2), inset 0 1px 0 rgba(255,255,255,0.05)";
+                e.currentTarget.style.borderColor = "rgba(239,68,68,0.7)";
+              }}
             >
-              {demoLoading ? "Loading demo APK..." : "⚡ Load Demo: Fake SBI Banking Trojan"}
+              {demoLoading ? (
+                <>
+                  <span className="spinner-sm" />
+                  Loading demo APK...
+                </>
+              ) : (
+                <>
+                  <span style={{ fontSize: "15px" }}>⚡</span>
+                  Try Demo — Fake SBI Banking Trojan
+                </>
+              )}
             </button>
-            <p style={{ fontSize: "11px", color: "#475569", marginTop: "6px", textAlign: "center" }}>
-              Pre-loaded malicious APK for demonstration
+            <p style={{ fontSize: "11px", color: "#475569", marginTop: "8px", textAlign: "center" }}>
+              Pre-loaded malicious APK · runs full AI analysis
             </p>
           </div>
           {displayError && (

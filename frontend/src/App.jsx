@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./components/Navbar";
+import SplashScreen from "./components/SplashScreen";
 import UploadPage from "./pages/UploadPage";
 import LoadingPage from "./pages/LoadingPage";
 import ResultsPage from "./pages/ResultsPage";
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
   const [page, setPage] = useState("upload");
   const [selectedFile, setSelectedFile] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
@@ -67,6 +69,7 @@ function App() {
 
   return (
     <>
+      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
       <Navbar />
       <div
         className={`page-transition ${visible ? "fade-in-active" : "fade-out"}`}

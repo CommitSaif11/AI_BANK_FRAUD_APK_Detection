@@ -47,25 +47,6 @@ function UploadPage({ onFileSelect, error: externalError }) {
 
   return (
     <div className="fade-in">
-      {/* Sponsors bar */}
-      <div
-        style={{
-          background: "rgba(255,255,255,0.97)",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          padding: "16px 40px",
-          textAlign: "center",
-        }}
-      >
-        <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#94a3b8", marginBottom: "12px" }}>
-          Built for
-        </div>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "80px" }}>
-          <img src="/logos/bank-of-india.png" alt="Bank of India" style={{ height: "60px", objectFit: "contain", background: "#fff", padding: "8px" }} />
-          <img src="/logos/iit_hyderabad_logo.jpg" alt="IIT Hyderabad" style={{ height: "70px", objectFit: "contain", background: "#fff", padding: "8px" }} />
-          <img src="/logos/dept_of_financial_services.jfif" alt="Department of Financial Services" style={{ height: "60px", objectFit: "contain", background: "#fff", padding: "8px" }} />
-        </div>
-      </div>
-
       <div className="hero-grid">
         <div>
           <h1

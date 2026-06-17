@@ -59,26 +59,10 @@ function UploadPage({ onFileSelect, error: externalError }) {
         <div style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", color: "#94a3b8", marginBottom: "12px" }}>
           Built for
         </div>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "60px" }}>
-          {/* Bank of India */}
-          <div style={{ textAlign: "center" }}>
-            <div style={{ background: "#003087", color: "#fff", fontWeight: "bold", fontSize: "14px", padding: "8px 16px", borderRadius: "4px" }}>
-              Bank of India
-            </div>
-            <div style={{ fontSize: "11px", color: "#64748b", fontStyle: "italic", marginTop: "4px" }}>
-              Relationship beyond banking
-            </div>
-          </div>
-          {/* IIT Bombay */}
-          <div style={{ textAlign: "center" }}>
-            <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#FF6B00", margin: "0 auto 4px" }} />
-            <div style={{ fontWeight: "bold", fontSize: "20px", color: "#FF6B00" }}>IIT Bombay</div>
-          </div>
-          {/* DFS */}
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontWeight: "bold", fontSize: "13px", color: "#1a1a1a" }}>🏛️ Department of Financial Services</div>
-            <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>वित्तीय सेवाएं विभाग</div>
-          </div>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "80px" }}>
+          <img src="/logos/bank-of-india.png" alt="Bank of India" style={{ height: "60px", objectFit: "contain", background: "#fff", padding: "8px" }} />
+          <img src="/logos/iit_hyderabad_logo.jpg" alt="IIT Hyderabad" style={{ height: "70px", objectFit: "contain", background: "#fff", padding: "8px" }} />
+          <img src="/logos/dept_of_financial_services.jfif" alt="Department of Financial Services" style={{ height: "60px", objectFit: "contain", background: "#fff", padding: "8px" }} />
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import Footer from "../components/Footer";
 
 const RISK_COLORS = {
   CRITICAL: { bg: "var(--red-bg)", border: "var(--red)", text: "var(--red-light)" },
@@ -740,6 +741,7 @@ function ResultsPage({ data, filename, onReset }) {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

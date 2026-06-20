@@ -1,3 +1,5 @@
+import Footer from "../components/Footer";
+
 const SUBTEXTS = [
   "Extracting APK contents and parsing manifest...",
   "Running heuristic scoring engine...",
@@ -127,6 +129,7 @@ function LoadingPage({ filename, currentStep = 0 }) {
           }}
         />
       </div>
+      <Footer />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Footer from "../components/Footer";
 
 const STATS = [
   { target: 15, suffix: "+", label: "Dangerous Permissions Tracked" },
@@ -294,7 +295,7 @@ function UploadPage({ onFileSelect, error: externalError }) {
                   Loading demo APK...
                 </>
               ) : (
-                "Try Demo — Fake SBI Banking Trojan"
+                "Try Demo — Malicious Banking Trojan"
               )}
             </button>
             <p style={{ fontSize: "11px", color: "#475569", marginTop: "8px", textAlign: "center" }}>
@@ -340,6 +341,7 @@ function UploadPage({ onFileSelect, error: externalError }) {
           </div>
         ))}
       </div>
+      <Footer />
     </div>
   );
 }

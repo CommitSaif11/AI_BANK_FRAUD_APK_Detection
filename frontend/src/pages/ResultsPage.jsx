@@ -93,7 +93,12 @@ function ResultsPage({ data, filename, onReset }) {
   const flaggedUrls = networkRisk?.flagged_urls || [];
   const reasons = impersonation?.reasons || [];
   const matchedPermissions = fingerprintMatch?.matched_permission_overlap || [];
-  const recommendedActions = riskAssessment?.recommended_actions || [];
+  const rawActions = riskAssessment?.recommended_actions || [];
+  const recommendedActions = Array.isArray(rawActions)
+    ? rawActions
+    : typeof rawActions === "string" && rawActions.trim()
+      ? rawActions.split(/\n|(?:\d+\.\s)/).filter((s) => s.trim())
+      : [];
 
   const handleDownloadPdf = async () => {
     setDownloading(true);
@@ -113,7 +118,8 @@ function ResultsPage({ data, filename, onReset }) {
     }
   };
 
-  const confidence = fingerprintMatch?.confidence ?? 0;
+  const rawConfidence = fingerprintMatch?.confidence ?? 0;
+  const confidence = Math.round(rawConfidence * 10) / 10;
   const circumference = 2 * Math.PI * 40;
   const dashOffset = circumference * (1 - confidence / 100);
 
@@ -373,7 +379,7 @@ function ResultsPage({ data, filename, onReset }) {
 
             <div style={{ marginBottom: "12px" }}>
               <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Final Verdict</div>
-              <div style={{ fontSize: "14px", fontWeight: 500, color: "#fff" }}>{riskAssessment?.verdict || "—"}</div>
+              <div style={{ fontSize: "14px", fontWeight: 500, color: "#fff" }}>{riskAssessment?.verdict || triage?.triage_summary || "—"}</div>
             </div>
             <div style={{ marginBottom: "12px" }}>
               <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px" }}>Confidence Level</div>
@@ -397,7 +403,8 @@ function ResultsPage({ data, filename, onReset }) {
             )}
             <div>
               <div style={{ fontSize: "10px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "6px" }}>Recommended Actions</div>
-              {(riskAssessment?.recommended_actions || []).map((a, i) => (
+              {recommendedActions.length === 0 && <span style={{ color: "var(--text-muted)", fontSize: "13px" }}>—</span>}
+              {recommendedActions.map((a, i) => (
                 <div key={i} style={{ display: "flex", gap: "8px", marginBottom: "6px", alignItems: "flex-start" }}>
                   <span style={{ background: "rgba(245,158,11,0.15)", color: "#fbbf24", fontSize: "10px", fontWeight: 600, padding: "1px 6px", borderRadius: "4px", flexShrink: 0, marginTop: "1px" }}>{i + 1}</span>
                   <span style={{ fontSize: "13px", color: "#cbd5e1", lineHeight: 1.5 }}>{a}</span>
@@ -703,7 +710,7 @@ function ResultsPage({ data, filename, onReset }) {
           </div>
           <div style={{ fontWeight: 500, marginTop: "16px", marginBottom: "8px" }}>Verdict</div>
           <div style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-            {riskAssessment?.verdict || "—"}
+            {riskAssessment?.verdict || triage?.triage_summary || "—"}
           </div>
         </div>
 
@@ -717,11 +724,15 @@ function ResultsPage({ data, filename, onReset }) {
           }}
         >
           <div style={{ fontWeight: 500, marginBottom: "8px" }}>Recommended Actions</div>
-          <ol style={{ paddingLeft: "18px", fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.8 }}>
-            {recommendedActions.map((a, i) => (
-              <li key={i}>{a}</li>
-            ))}
-          </ol>
+          {recommendedActions.length === 0 ? (
+            <div style={{ fontSize: "13px", color: "var(--text-muted)" }}>No specific actions recommended.</div>
+          ) : (
+            <ol style={{ paddingLeft: "18px", fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.8 }}>
+              {recommendedActions.map((a, i) => (
+                <li key={i}>{a}</li>
+              ))}
+            </ol>
+          )}
 
           {riskAssessment?.customer_advisory && (
             <div

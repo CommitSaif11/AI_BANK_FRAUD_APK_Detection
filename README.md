@@ -80,7 +80,7 @@ You will also need a **free Groq API key** for the AI pipeline — get one at [c
 ## 1. Clone the repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/CommitSaif11/AI_BANK_FRAUD_APK_Detection.git
 cd bank_fraud_apk_detection
 ```
 

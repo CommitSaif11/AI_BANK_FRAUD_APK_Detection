@@ -1,8 +1,8 @@
 """
 Builds a minimal-but-valid test APK (test_malicious.apk) with:
   - AndroidManifest.xml (hand-encoded binary AXML) declaring:
-      package = com.sbi.update.security
-      application label = "SBI Bank Update"
+      package = com.boi.update.security
+      application label = "BOI Bank Update"
       permissions: READ_SMS, RECEIVE_SMS, SEND_SMS, BIND_ACCESSIBILITY_SERVICE,
                     SYSTEM_ALERT_WINDOW, REQUEST_INSTALL_PACKAGES, RECEIVE_BOOT_COMPLETED
   - classes.dex (hand-built minimal DEX) whose string pool contains
@@ -59,9 +59,9 @@ STRINGS = [
     "android",                    # 3
     "manifest",                   # 4
     "package",                    # 5
-    "com.sbi.update.security",    # 6
+    "com.boi.update.security",    # 6
     "application",                # 7
-    "SBI Bank Update",            # 8
+    "BOI Bank Update",            # 8
     "uses-permission",            # 9
 ] + PERMISSIONS                   # 10..16
 
@@ -153,11 +153,11 @@ def build_manifest():
     parts.append(start_namespace(ns_prefix, ns_uri))
 
     parts.append(start_element(IDX["manifest"], [
-        (0xFFFFFFFF, IDX["package"], IDX["com.sbi.update.security"]),
+        (0xFFFFFFFF, IDX["package"], IDX["com.boi.update.security"]),
     ]))
 
     parts.append(start_element(IDX["application"], [
-        (android_ns_idx, IDX["label"], IDX["SBI Bank Update"]),
+        (android_ns_idx, IDX["label"], IDX["BOI Bank Update"]),
     ]))
 
     for perm in PERMISSIONS:

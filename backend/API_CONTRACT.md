@@ -32,7 +32,7 @@ Top-level JSON object:
 |-------|------|-------------|
 | `filename` | string | Original uploaded filename |
 | `size` | integer | File size in bytes |
-| `package_name` | string | APK package identifier (e.g. `com.sbi.update.security`) |
+| `package_name` | string | APK package identifier (e.g. `com.boi.update.security`) |
 | `app_name` | string | App display label from the manifest |
 | `permissions` | array of strings | All requested permissions (e.g. `android.permission.READ_SMS`) |
 | `activities` | array of strings | Declared activity class names |
@@ -106,8 +106,8 @@ Each entry in `certificates`:
 {
   "filename": "test_malicious.apk",
   "size": 864,
-  "package_name": "com.sbi.update.security",
-  "app_name": "SBI Bank Update",
+  "package_name": "com.boi.update.security",
+  "app_name": "BOI Bank Update",
   "permissions": [
     "android.permission.READ_SMS",
     "android.permission.SEND_SMS",

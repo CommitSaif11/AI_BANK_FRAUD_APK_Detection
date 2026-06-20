@@ -152,8 +152,8 @@ Top-level object — everything from `/analyze` (heuristic fields) **plus** the 
 {
   "filename": "test_malicious.apk",
   "size": 864,
-  "package_name": "com.sbi.update.security",
-  "app_name": "SBI Bank Update",
+  "package_name": "com.boi.update.security",
+  "app_name": "BOI Bank Update",
   "permissions": [
     "android.permission.RECEIVE_BOOT_COMPLETED",
     "android.permission.BIND_ACCESSIBILITY_SERVICE",
@@ -185,7 +185,7 @@ Top-level object — everything from `/analyze` (heuristic fields) **plus** the 
   "impersonation": {
     "impersonation_risk_score": 35,
     "reasons": [
-      "App label contains banking-related keyword(s) ['sbi', 'bank'] but package name 'com.sbi.update.security' contains suspicious term(s) ['update', 'security'] that legitimate banking apps typically do not use"
+      "App label contains banking-related keyword(s) ['boi', 'bank'] but package name 'com.boi.update.security' contains suspicious term(s) ['update', 'security'] that legitimate banking apps typically do not use"
     ]
   },
   "network_risk": {
@@ -218,7 +218,7 @@ Top-level object — everything from `/analyze` (heuristic fields) **plus** the 
     "investigation_priority": "CRITICAL",
     "requires_deep_analysis": true,
     "primary_threat_vector": "Steals OTPs and sensitive information via SMS and accessibility services",
-    "target_victim_profile": "Banking customers, particularly those using SBI services",
+    "target_victim_profile": "Banking customers, particularly those using BOI services",
     "triage_summary": "This APK poses a significant threat due to its ability to steal sensitive information and impersonate a legitimate banking app. The presence of suspicious permissions and URLs, along with a high permission risk score, warrants immediate attention. The matched family, Brata, is a known spyware and banking trojan, further emphasizing the need for a thorough investigation."
   },
   "analysis": {
@@ -226,7 +226,7 @@ Top-level object — everything from `/analyze` (heuristic fields) **plus** the 
     "network_analysis": "The suspicious URL found indicates that the malware communicates with a command and control server using a non-secure HTTP endpoint with a suspicious top-level domain, suggesting a malicious infrastructure designed to steal sensitive information from victims.",
     "behavioral_pattern": "The likely attack chain involves the malware automatically starting on device boot, waiting for an SMS containing an OTP, then using accessibility services to read the OTP and send it to the command and control server, which could then use this information to perform transactions on the victim's bank account, potentially with the malware overlaying fake screens to trick the user into revealing more sensitive information.",
     "banking_impact": "The attacker can steal OTPs, allowing them to perform transactions on the victim's bank account, potentially leading to financial loss, and may also be able to access other sensitive information such as account numbers and passwords.",
-    "impersonation_analysis": "This app is pretending to be a legitimate SBI Bank update, using the bank's name and potentially its branding to trick victims into installing the malware, which is a social engineering technique designed to build trust with the victim and increase the likelihood of the malware being installed.",
+    "impersonation_analysis": "This app is pretending to be a legitimate BOI Bank update, using the bank's name and potentially its branding to trick victims into installing the malware, which is a social engineering technique designed to build trust with the victim and increase the likelihood of the malware being installed.",
     "technical_indicators": ["READ_SMS", "SEND_SMS", "BIND_ACCESSIBILITY_SERVICE", "SYSTEM_ALERT_WINDOW", "REQUEST_INSTALL_PACKAGES", "non-HTTPS C2 server", "suspicious .top domain"]
   },
   "risk_assessment": {
@@ -249,9 +249,9 @@ Top-level object — everything from `/analyze` (heuristic fields) **plus** the 
     "customer_advisory": "Uninstall suspicious app to protect account security"
   },
   "report": {
-    "report_title": "CRITICAL Threat: SBI Bank Update (com.sbi.update.security) Banking Trojan Investigation Report",
-    "executive_summary": "A critical threat has been identified in the SBI Bank Update APK, which poses a significant risk to bank customers' accounts and sensitive information. The malware, classified as a banking trojan, can steal OTPs and perform transactions, potentially leading to financial loss. Immediate action is required to protect customers and prevent further malicious activity. It is recommended that all transactions from devices with this APK installed be blocked, and customers be notified to uninstall the app immediately.",
-    "threat_overview": "The SBI Bank Update APK has been found to be a banking trojan, specifically matching the Brata malware family with a confidence level of 44.99999999999999%. The malware's behavioral pattern involves automatically starting on device boot, waiting for an SMS containing an OTP, and then using accessibility services to read the OTP and send it to the command and control server. This information can then be used to perform transactions on the victim's bank account, potentially with the malware overlaying fake screens to trick the user into revealing more sensitive information.",
+    "report_title": "CRITICAL Threat: BOI Bank Update (com.boi.update.security) Banking Trojan Investigation Report",
+    "executive_summary": "A critical threat has been identified in the BOI Bank Update APK, which poses a significant risk to bank customers' accounts and sensitive information. The malware, classified as a banking trojan, can steal OTPs and perform transactions, potentially leading to financial loss. Immediate action is required to protect customers and prevent further malicious activity. It is recommended that all transactions from devices with this APK installed be blocked, and customers be notified to uninstall the app immediately.",
+    "threat_overview": "The BOI Bank Update APK has been found to be a banking trojan, specifically matching the Brata malware family with a confidence level of 44.99999999999999%. The malware's behavioral pattern involves automatically starting on device boot, waiting for an SMS containing an OTP, and then using accessibility services to read the OTP and send it to the command and control server. This information can then be used to perform transactions on the victim's bank account, potentially with the malware overlaying fake screens to trick the user into revealing more sensitive information.",
     "technical_findings": "Technical analysis of the APK has revealed that it requests a range of permissions, including accessibility services and SMS reading capabilities, which are used to facilitate the theft of OTPs and other sensitive information. Network activity indicates communication with a command and control server, which is likely used to receive instructions and send stolen data. The malware's ability to overlay fake screens and intercept SMS messages makes it a highly sophisticated and dangerous threat.",
     "risk_assessment_narrative": "The risk score of 98/100 indicates a critical risk to bank customers' accounts and sensitive information. This risk assessment is based on the malware's ability to steal OTPs and perform transactions, which could result in significant financial loss for customers. The fact that the malware can also access other sensitive information, such as account numbers and passwords, further exacerbates the risk. The high confidence level in the malware family match and the sophistication of the malware's behavioral pattern also contribute to the critical risk assessment.",
     "impact_assessment": "The potential impact of this threat to bank customers and the institution is significant. If left unchecked, the malware could result in widespread financial loss for customers, damage to the bank's reputation, and potential regulatory penalties. The fact that the malware can access sensitive information, such as account numbers and passwords, also raises concerns about the potential for identity theft and other forms of cybercrime. It is essential that immediate action be taken to protect customers and prevent further malicious activity.",
@@ -263,11 +263,11 @@ Top-level object — everything from `/analyze` (heuristic fields) **plus** the 
       "Collaborate with law enforcement to take down C2 servers and disrupt malware distribution, to be carried out by the cybersecurity team"
     ],
     "indicators_of_compromise": [
-      "Package name: com.sbi.update.security",
+      "Package name: com.boi.update.security",
       "URLs: command and control server URLs",
       "Permission combinations: accessibility services and SMS reading capabilities"
     ],
-    "customer_communication": "Dear valued customer, we have identified a critical threat in the SBI Bank Update APK, which may have been installed on your device. This malware can steal OTPs and perform transactions, potentially leading to financial loss. We strongly advise you to uninstall the app immediately and monitor your account activity for any suspicious transactions. If you have any concerns or questions, please do not hesitate to contact our customer service team.",
+    "customer_communication": "Dear valued customer, we have identified a critical threat in the BOI Bank Update APK, which may have been installed on your device. This malware can steal OTPs and perform transactions, potentially leading to financial loss. We strongly advise you to uninstall the app immediately and monitor your account activity for any suspicious transactions. If you have any concerns or questions, please do not hesitate to contact our customer service team.",
     "analyst_notes": "Additional analysis is required to determine the full extent of the malware's capabilities and to identify any potential variants. It is also recommended that customers be advised to install antivirus software and keep their devices and operating systems up to date to prevent similar threats in the future."
   },
   "final_risk_score": 98,

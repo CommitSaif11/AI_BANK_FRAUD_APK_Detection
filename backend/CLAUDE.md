@@ -15,7 +15,7 @@ FastAPI-based APK malware analysis tool. Accepts an uploaded APK, extracts metad
 # Run the matcher's standalone smoke test
 ./venv/Scripts/python.exe app/fingerprints/test_matcher.py
 
-# Build the hand-crafted test APK (com.sbi.update.security / "SBI Bank Update")
+# Build the hand-crafted test APK (com.boi.update.security / "BOI Bank Update")
 ./venv/Scripts/python.exe create_test_apk.py
 
 # Hit the running server with a sample APK and pretty-print the response

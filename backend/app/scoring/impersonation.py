@@ -1,13 +1,14 @@
 import re
 
 BANKING_KEYWORDS = [
-    "sbi", "hdfc", "icici", "bank", "upi", "pay", "axis", "kotak", "paytm",
+    "boi", "sbi", "hdfc", "icici", "bank", "upi", "pay", "axis", "kotak", "paytm",
     "pnb", "bob", "canara", "union", "phonepe", "gpay",
 ]
 
 SUSPICIOUS_PACKAGE_SUFFIXES = ["update", "security", "verify", "install", "latest"]
 
 KNOWN_PACKAGE_PREFIXES = [
+    "com.boi",
     "com.sbi",
     "com.csam.icici",
     "com.snapwork.hdfc",

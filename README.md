@@ -301,7 +301,7 @@ Both `/analyze` and `/analyze/full` accept a `multipart/form-data` POST with a s
   },
   "impersonation": {
     "impersonation_risk_score": 40,
-    "reasons": ["Package name contains banking keyword 'sbi'"]
+    "reasons": ["Package name contains banking keyword 'boi'"]
   },
   "network_risk": {
     "network_risk_score": 25,
@@ -364,8 +364,8 @@ When an APK is uploaded, three independent scorers evaluate it:
 - Detects combo patterns: the **OTP-stealer** rule adds +25 points if the APK requests `READ_SMS` + `RECEIVE_BOOT_COMPLETED` + `SEND_SMS` together.
 
 **Impersonation Scorer** (`app/scoring/impersonation.py`)
-- Checks app labels against banking keywords (`sbi`, `hdfc`, `bank`, `upi`, `pay`, etc.).
-- Matches package names against known official banking package prefixes (`com.sbi`, `com.csam.icici`, etc.).
+- Checks app labels against banking keywords (`boi`, `sbi`, `hdfc`, `bank`, `upi`, `pay`, etc.).
+- Matches package names against known official banking package prefixes (`com.boi`, `com.sbi`, `com.csam.icici`, etc.).
 - Flags suspicious suffixes (`update`, `security`, `verify`, `install`, `latest`).
 - Detects random/generic package name segments via regex.
 

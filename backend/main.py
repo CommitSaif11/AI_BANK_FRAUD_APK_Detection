@@ -198,6 +198,10 @@ async def analyze_full(file: UploadFile = File(...)):
         ANALYSIS_RESULTS[file.filename] = full_result
         logger.info("Full analysis complete for '%s'", file.filename)
 
+        # Generate PDF using the AI pipeline output directly
+        pdf_path = os.path.join(REPORTS_DIR, f"{file.filename}_report.pdf")
+        generate_pdf_report(ai_results, pdf_path)
+
         return full_result
     finally:
         if os.path.exists(tmp_path):
@@ -231,7 +235,8 @@ def get_report(filename: str):
         result = ANALYSIS_RESULTS.get(filename)
         if result is None:
             raise HTTPException(status_code=404, detail="No analysis result found for this filename")
-        generate_pdf_report(result, pdf_path)
+        ai_data = result.get("ai_analysis", result)
+        generate_pdf_report(ai_data, pdf_path)
 
     return FileResponse(
         pdf_path,

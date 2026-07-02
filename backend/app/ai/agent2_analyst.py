@@ -3,7 +3,7 @@ import time
 
 import groq
 
-from app.ai.config import groq_client
+from app.ai.config import groq_client, GROQ_MODEL
 
 SYSTEM_PROMPT = (
     "You are a senior malware analyst specializing in Android banking trojans. "
@@ -80,7 +80,7 @@ def _call_groq(user_prompt: str) -> str:
     for attempt in range(3):
         try:
             response = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model=GROQ_MODEL,
                 max_tokens=1000,
                 temperature=0.2,
                 messages=[

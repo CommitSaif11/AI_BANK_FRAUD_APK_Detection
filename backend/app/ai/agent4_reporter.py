@@ -4,7 +4,7 @@ from datetime import date
 
 import groq
 
-from app.ai.config import groq_client
+from app.ai.config import groq_client, GROQ_MODEL
 
 SYSTEM_PROMPT = (
     "You are a professional cybersecurity report writer at a tier-1 bank. You write "
@@ -88,7 +88,7 @@ def _call_groq(user_prompt: str) -> str:
     for attempt in range(3):
         try:
             response = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model=GROQ_MODEL,
                 max_tokens=1500,
                 temperature=0.3,
                 messages=[

@@ -1,4 +1,7 @@
 .claude/
+**/.claude/
+CLAUDE.md
+**/CLAUDE.md
 backend/apk_analysis_*/
 backend/test_output/
 backend/test_jadx_output/
